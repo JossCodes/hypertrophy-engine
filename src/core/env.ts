@@ -1,28 +1,30 @@
-import dotenv from 'dotenv'
-import { z } from 'zod'
+import dotenv from "dotenv";
+import { z } from "zod";
 
-dotenv.config()
+dotenv.config();
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
-//   DATABASE_URL: z.string().url(),
-})
+  NODE_ENV: z.enum(["development", "production"]).default("development"),
+  //   DATABASE_URL: z.string().url(),
+});
 
-let envData: z.infer<typeof envSchema>
+let envData: z.infer<typeof envSchema>;
 
 export function validateEnv() {
-  const result = envSchema.safeParse(process.env)
-
+  const result = envSchema.safeParse(process.env);
   if (!result.success) {
-    console.error('Invalid environment variables:', result.error.format())
-    process.exit(1)
+    console.error("Invalid environment variables:", result.error.format());
+    process.exit(1);
   }
 
-  envData = result.data
+  envData = result.data;
 }
 
 export function getEnv() {
-  if (!envData) throw new Error('Environment variables not validated. Call validateEnv() first.')
-  return envData
+  if (!envData)
+    throw new Error(
+      "Environment variables not validated. Call validateEnv() first.",
+    );
+  return envData;
 }
