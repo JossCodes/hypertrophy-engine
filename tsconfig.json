@@ -6,6 +6,9 @@
     "moduleDetection": "force",
     "outDir": "dist",
     "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
