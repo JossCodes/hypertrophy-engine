@@ -1,4 +1,5 @@
 import { getEnv, validateEnv } from "@/core/env.js";
+import { logger } from "@/core/logger.js";
 import { router } from "@/routes/index.js";
 import express from "express";
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -17,6 +18,6 @@ export async function startServer() {
   app.use(errorHandler);
 
   app.listen(port, () => {
-    console.log(`Server is running in ${env.NODE_ENV} mode on port ${port}`);
+    logger.info(`Server is running in ${env.NODE_ENV} mode on port ${port}`);
   });
 }
