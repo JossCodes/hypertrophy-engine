@@ -140,3 +140,4 @@ vite.config.ts.timestamp-*
 
 # keys
 /keys/*
+/src/generated/prisma
