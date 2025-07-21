@@ -5,10 +5,10 @@ export async function handleRegister(
   req: Request,
   res: Response,
   next: NextFunction,
-) {
+): Promise<void> {
   try {
     const result = await registerUser(req.body);
-    return res.status(201).json(result);
+    res.status(201).json(result);
   } catch (err) {
     next(err);
   }
@@ -18,10 +18,10 @@ export async function handleLogin(
   req: Request,
   res: Response,
   next: NextFunction,
-) {
+): Promise<void> {
   try {
     const result = await loginUser(req.body);
-    return res.status(200).json(result);
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
