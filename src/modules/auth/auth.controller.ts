@@ -1,3 +1,4 @@
+import { StatusCodes } from "@/core/statusCodes.js";
 import { NextFunction, Request, Response } from "express";
 import { loginUser, registerUser } from "./auth.service.js";
 
@@ -8,7 +9,7 @@ export async function handleRegister(
 ): Promise<void> {
   try {
     const result = await registerUser(req.body);
-    res.status(201).json(result);
+    res.status(StatusCodes.CREATED).json(result);
   } catch (err) {
     next(err);
   }
@@ -21,7 +22,7 @@ export async function handleLogin(
 ): Promise<void> {
   try {
     const result = await loginUser(req.body);
-    res.status(200).json(result);
+    res.status(StatusCodes.OK).json(result);
   } catch (err) {
     next(err);
   }

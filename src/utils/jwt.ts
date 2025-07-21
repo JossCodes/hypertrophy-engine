@@ -1,16 +1,11 @@
 import { getEnv, getKeys } from "@/core/env.js";
-import {
-  JwtPayload,
-  sign,
-  SignOptions,
-  verify,
-  VerifyOptions,
-} from "jsonwebtoken";
+import type { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export function signJwt(payload: object): string {
   const { privateKey } = getKeys();
   const { JWT_EXPIRES_IN } = getEnv();
-  return sign(payload, privateKey, {
+  return jwt.sign(payload, privateKey, {
     algorithm: "RS256",
     expiresIn: JWT_EXPIRES_IN,
   } as SignOptions);
@@ -18,7 +13,7 @@ export function signJwt(payload: object): string {
 
 export function verifyJwt<T = JwtPayload>(token: string): T {
   const { publicKey } = getKeys();
-  return verify(token, publicKey, {
+  return jwt.verify(token, publicKey, {
     algorithms: ["RS256"],
   } as VerifyOptions) as T;
 }
