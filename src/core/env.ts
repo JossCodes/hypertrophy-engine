@@ -8,7 +8,10 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
-  //   DATABASE_URL: z.string().url(),
+  //   DATABASE_URL: z.string().url(),,
+  JWT_PRIVATE_KEY_PATH: z.string(),
+  JWT_PUBLIC_KEY_PATH: z.string(),
+  JWT_EXPIRES_IN: z.string().default("15m"),
 });
 
 let envData: z.infer<typeof envSchema>;
