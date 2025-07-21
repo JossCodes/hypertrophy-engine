@@ -1,7 +1,8 @@
 import { AppError } from "@/core/error.js";
 import { prisma } from "@/core/prisma.js";
 import { StatusCodes } from "@/core/statusCodes.js";
-import { hashPassword } from "@/utils/hash.js";
+import { hashPassword, verifyPassword } from "@/utils/hash.js";
+import { signJwt } from "@/utils/jwt.js";
 import { LoginInput, RegisterInput } from "./auth.validation.js";
 
 export async function registerUser(input: RegisterInput) {
@@ -26,5 +27,27 @@ export async function registerUser(input: RegisterInput) {
 }
 
 export async function loginUser(input: LoginInput) {
-  // TODO: implement user login
+  const { email, password } = input;
+
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid credentials");
+  }
+
+  const valid = await verifyPassword(user.passwordHash, password);
+  if (!valid) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid credentials");
+  }
+
+  const token = signJwt({
+    userId: user.id,
+    role: user.role,
+  });
+
+  return {
+    token,
+    userId: user.id,
+    role: user.role,
+  };
 }
