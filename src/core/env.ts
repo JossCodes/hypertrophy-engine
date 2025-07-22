@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { readFileSync } from "fs";
 import { z } from "zod";
 
 dotenv.config();
@@ -8,10 +9,16 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
-  //   DATABASE_URL: z.string().url(),
+  //   DATABASE_URL: z.string().url(),,
+  JWT_PRIVATE_KEY_PATH: z.string(),
+  JWT_PUBLIC_KEY_PATH: z.string(),
+  JWT_EXPIRES_IN: z.string().default("15m"),
 });
 
 let envData: z.infer<typeof envSchema>;
+
+let privateKey: string;
+let publicKey: string;
 
 export function validateEnv() {
   const result = envSchema.safeParse(process.env);
@@ -29,4 +36,15 @@ export function getEnv() {
       "Environment variables not validated. Call validateEnv() first.",
     );
   return envData;
+}
+
+export function getKeys() {
+  const env = getEnv();
+  if (!privateKey) {
+    privateKey = readFileSync(env.JWT_PRIVATE_KEY_PATH, "utf8");
+  }
+  if (!publicKey) {
+    publicKey = readFileSync(env.JWT_PUBLIC_KEY_PATH, "utf8");
+  }
+  return { privateKey, publicKey };
 }
